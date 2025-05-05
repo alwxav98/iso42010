@@ -1,7 +1,7 @@
 import requests
 from difflib import SequenceMatcher
 
-API_KEY = "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"
+API_KEY = "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"
 BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
 HEADERS = {
     "Authorization": f"Bearer {API_KEY}",
@@ -76,11 +76,15 @@ def comparar_respuestas(usuario, ia):
 
 def evaluar_alineacion_iso42010(texto):
     """
-    Evalúa qué tan alineado está un texto con la norma ISO 42010 (porcentaje).
+    Evalúa qué tan alineado está un texto con los principios de la norma ISO 42010.
+    Devuelve un porcentaje entre 0 y 100, siendo 0 sin relación y 100 totalmente alineado.
     """
     prompt = (
-        "Analiza el siguiente texto y evalúa qué tan alineado está con los principios de la norma ISO 42010. "
-        "Devuélveme solo un número porcentual (sin símbolos ni explicaciones) entre 0 y 100.\n\n"
+        "Eres un experto en arquitectura de sistemas y conoces la norma ISO/IEC/IEEE 42010. "
+        "Tu tarea es leer el siguiente texto y evaluar si está relacionado técnica y directamente con los principios de esta norma. "
+        "Si el texto no menciona arquitectura, stakeholders, puntos de vista, modelos o conceptos claves de ISO 42010, responde 0. "
+        "Si el texto aplica correctamente esos principios, responde con un porcentaje entre 0 y 100 según el nivel de alineación. "
+        "Solo devuelve un número, sin explicaciones ni símbolos.\n\n"
         f"Texto:\n{texto}"
     )
 
