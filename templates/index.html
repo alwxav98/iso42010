@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Casos ISO 42010</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafe;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+
+        .left-panel, .right-panel {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .left-panel {
+            background: linear-gradient(135deg, #004080, #0066cc);
+            color: #ffffff;
+            align-items: center;
+            text-align: center;
+        }
+
+        .left-panel h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .left-panel ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .left-panel li {
+            font-size: 18px;
+            margin: 8px 0;
+        }
+
+        .right-panel {
+            background-color: #ffffff;
+            align-items: flex-start;
+        }
+
+        .right-panel h1 {
+            font-size: 32px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .right-panel p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.7;
+            max-width: 700px;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+
+        .right-panel form button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .right-panel form button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .left-panel, .right-panel {
+                align-items: center;
+                text-align: center;
+            }
+            .right-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Panel izquierdo -->
+        <div class="left-panel">
+            <!-- Imagen del logo -->
+    <img src="{{ url_for('static', filename='logoUce.png') }}" alt="Logo UCE" style="width: 120px; margin-bottom: 20px;">
+            <h1>Universidad Central del Ecuador</h1>
+            <br>
+            <h2>Facultad de Ingeniería y Ciencias Aplicadas</h2>
+            <h2>Sistemas de Información</h2>
+            <p><strong>Integrantes:</strong></p>
+            <ul>
+                <li>Sebastían Pérez</li>
+                <li>Julián Pulupa</li>
+                <li>Alexandra Vaca</li>
+                <li>Fernando Yaguana</li>
+            </ul>
+            <br>
+            <br>
+            <h2>Legislación Informática</h2>
+        </div>
+
+        <!-- Panel derecho -->
+        <div class="right-panel">
+            <h1>Generador de Casos de Estudio - ISO 42010</h1>
+            <p>
+                La <strong>ISO/IEC/IEEE 42010</strong> es una norma internacional que establece un marco para describir
+                arquitecturas de sistemas y software. Define principios para identificar stakeholders (partes interesadas),
+                sus necesidades, y documentar la arquitectura mediante puntos de vista y modelos estructurados.
+                <br><br>
+                Esta norma es esencial para lograr claridad, trazabilidad y coherencia en proyectos complejos. Facilita
+                la interoperabilidad y alinea las decisiones arquitectónicas con los objetivos organizacionales. Aquí
+                puedes generar automáticamente un caso de estudio basado en ISO 42010 y su respectiva solución.
+            </p>
+            <form method="POST" action="/generar">
+                <button type="submit">Generar caso de estudio y solución</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

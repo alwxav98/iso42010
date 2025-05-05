@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado Comparativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6f9;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 900px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            background-color: #f9f9f9;
+        }
+
+        .score {
+            font-size: 20px;
+            color: #007BFF;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        a {
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+            background: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultado Comparativo</h1>
+
+    <div class="box">
+        <h2>Tu Solución</h2>
+        <textarea readonly>{{ solucion_usuario }}</textarea>
+
+        <h2>Solución Generada por IA</h2>
+        <textarea readonly>{{ solucion_ia }}</textarea>
+
+        <p class="score">Similitud entre respuestas: {{ similitud }}%</p>
+        <p class="score">Alineación con ISO 42010 (Usuario): {{ alineacion_usuario }}%</p>
+        <p class="score">Alineación con ISO 42010 (IA): {{ alineacion_ia }}%</p>
+
+    </div>
+
+    <a href="/">Generar otro caso</a>
+</body>
+</html>
