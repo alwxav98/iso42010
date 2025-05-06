@@ -1,14 +1,12 @@
-import requests
+import google.generativeai as genai
 from difflib import SequenceMatcher
 
-API_KEY = "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"
-BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
-HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
-}
-MODEL = "openai/gpt-3.5-turbo"
-MAX_TOKENS = 500
+# 🔐 API Key de Google Gemini (obtenida en console.cloud.google.com)
+API_KEY = "AIzaSyDVyjTOslSXKFiM4wHQtdh3k3pgI_hGtwM"
+genai.configure(api_key=API_KEY)
+
+# Usaremos el modelo Gemini Pro
+MODEL = genai.GenerativeModel("gemini-1.5-pro-latest")
 
 
 def generar_caso():
@@ -22,18 +20,11 @@ def generar_caso():
         "NO incluyas la solución aún. El caso debe ser claro y profesional."
     )
 
-    response = requests.post(BASE_URL, headers=HEADERS, json={
-        "model": MODEL,
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 500
-    })
-
-    print("Respuesta al generar caso:", response.text)
-
     try:
-        return response.json()["choices"][0]["message"]["content"]
+        response = MODEL.generate_content(prompt)
+        return response.text.strip()
     except Exception as e:
-        print("Error al procesar el caso:", e)
+        print("Error al generar el caso:", e)
         return "Error al generar el caso de estudio."
 
 
@@ -46,18 +37,11 @@ def generar_solucion_ia(caso):
         f"siguiendo los principios de la norma ISO 42010:\n\n{caso}"
     )
 
-    response = requests.post(BASE_URL, headers=HEADERS, json={
-        "model": MODEL,
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 600
-    })
-
-    print("Respuesta al generar solución:", response.text)
-
     try:
-        return response.json()["choices"][0]["message"]["content"]
+        response = MODEL.generate_content(prompt)
+        return response.text.strip()
     except Exception as e:
-        print("Error al procesar la solución:", e)
+        print("Error al generar la solución:", e)
         return "No se pudo generar la solución del caso."
 
 
@@ -88,15 +72,10 @@ def evaluar_alineacion_iso42010(texto):
         f"Texto:\n{texto}"
     )
 
-    response = requests.post(BASE_URL, headers=HEADERS, json={
-        "model": MODEL,
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 10
-    })
-
     try:
-        content = response.json()["choices"][0]["message"]["content"]
-        return float(content.strip().replace("%", "").replace(",", "."))
+        response = MODEL.generate_content(prompt)
+        content = response.text.strip()
+        return float(content.replace("%", "").replace(",", "."))
     except Exception as e:
         print("Error al evaluar alineación ISO 42010:", e)
         return 0.0
