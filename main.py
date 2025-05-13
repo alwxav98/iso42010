@@ -1,5 +1,10 @@
 from flask import Flask, render_template, request
 from ai_engine import generar_caso, generar_solucion_ia, comparar_respuestas
+import markdown
+from flask import send_file
+from xhtml2pdf import pisa
+import io
+import re
 
 app = Flask(__name__)
 
@@ -13,21 +18,62 @@ def index():
 def generar():
     global caso_actual
     caso_actual = generar_caso()  # Solo se genera aquí
-    return render_template("generar.html", caso=caso_actual)  # Muestra el caso + input usuario
+    caso_html = markdown.markdown(caso_actual)
+    return render_template("generar.html", caso=caso_html)  # Muestra el caso + input usuario
 
 @app.route("/resolver", methods=["POST"])
 def resolver():
     global caso_actual
     solucion_usuario = request.form["solucion_usuario"]
     solucion_ia = generar_solucion_ia(caso_actual)
-    similitud, alineacion_usuario, alineacion_ia = comparar_respuestas(solucion_usuario, solucion_ia)
+    similitud, alineacion_usuario, alineacion_ia, analisis = comparar_respuestas(solucion_usuario, solucion_ia)
+    
+    caso_html = markdown.markdown(caso_actual)
+    solucion_ia_html = markdown.markdown(solucion_ia)
+    analisis_html = markdown.markdown(analisis)
+    
     return render_template("resultado.html",
-                           caso=caso_actual,
+                           caso=caso_html,
                            solucion_usuario=solucion_usuario,
-                           solucion_ia=solucion_ia,
+                           solucion_ia=solucion_ia_html,
                            similitud=similitud,
                            alineacion_usuario=alineacion_usuario,
-                           alineacion_ia=alineacion_ia)
+                           alineacion_ia=alineacion_ia,
+                           analisis=analisis_html)
+
+def limpiar_listas_para_pdf(html):
+    """
+    Convierte listas HTML (<ul><li>) a párrafos simples (<p>) con viñetas.
+    Compatible con xhtml2pdf.
+    """
+    html = html.replace('<ul>', '').replace('</ul>', '')
+    html = html.replace('<ol>', '').replace('</ol>', '')
+    html = re.sub(r'<li>(.*?)</li>', r'<p>• \1</p>', html)
+    return html
+
+@app.route("/descargar_pdf", methods=["POST"])
+def descargar_pdf():
+    caso = limpiar_listas_para_pdf(request.form["caso"])
+    solucion_usuario = limpiar_listas_para_pdf(request.form["solucion_usuario"])
+    solucion_ia = limpiar_listas_para_pdf(request.form["solucion_ia"])
+    analisis = limpiar_listas_para_pdf(request.form["analisis"])
+
+    rendered = render_template("pdf_template.html",
+                               caso=caso,
+                               solucion_usuario=solucion_usuario,
+                               solucion_ia=solucion_ia,
+                               analisis=analisis)
+
+    pdf_file = io.BytesIO()
+    pisa_status = pisa.CreatePDF(io.StringIO(rendered), dest=pdf_file)
+    pdf_file.seek(0)
+
+    if pisa_status.err:
+        return "Hubo un error al generar el PDF", 500
+
+    return send_file(pdf_file, as_attachment=True, download_name="informe_iso42010.pdf")
+
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
