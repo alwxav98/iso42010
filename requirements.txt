@@ -1,2 +1,6 @@
 Flask
 requests
+markdown
+python-dotenv
+google-generativeai
+xhtml2pdf
