@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f6f9;
+            background-color: #C2CFCE;
             margin: 0;
             padding: 20px;
         }
@@ -64,8 +64,11 @@
         <div class="container">
             <div class="panel">
                 <h2>Caso de Estudio</h2>
-                <textarea readonly name="caso">{{ caso }}</textarea>
+                <div style="text-align: justify; background-color: #f9f9f9; padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
+                    {{ caso|safe }}
+                </div>
             </div>
+
             <div class="panel">
                 <h2>Tu Solución</h2>
                 <textarea name="solucion_usuario" required placeholder="Escribe tu análisis o solución aquí..."></textarea>
