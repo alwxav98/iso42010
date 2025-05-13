@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f6f9;
+            background-color: #C2CFCE;
             padding: 20px;
             text-align: center;
         }
@@ -21,20 +21,26 @@
             max-width: 900px;
         }
 
+        .box2 {
+            background: #E9F1C6;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 900px;
+        }
+
         h1 {
             margin-bottom: 20px;
             color: #333;
         }
 
-        textarea {
-            width: 100%;
-            min-height: 180px;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            resize: vertical;
+        .section {
+            text-align: justify;
             background-color: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
 
         .score {
@@ -44,7 +50,7 @@
             margin-top: 10px;
         }
 
-        a {
+        a, button {
             margin-top: 20px;
             display: inline-block;
             text-decoration: none;
@@ -52,7 +58,19 @@
             color: white;
             padding: 10px 20px;
             border-radius: 6px;
+            border: none;
+            cursor: pointer;
         }
+
+        button:hover, a:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -60,17 +78,35 @@
 
     <div class="box">
         <h2>Tu Solución</h2>
-        <textarea readonly>{{ solucion_usuario }}</textarea>
+        <div class="section">
+            {{ solucion_usuario|safe }}
+        </div>
 
         <h2>Solución Generada por IA</h2>
-        <textarea readonly>{{ solucion_ia }}</textarea>
-
-        <p class="score">Similitud entre respuestas: {{ similitud }}%</p>
-        <p class="score">Alineación con ISO 42010 (Usuario): {{ alineacion_usuario }}%</p>
-        <p class="score">Alineación con ISO 42010 (IA): {{ alineacion_ia }}%</p>
-
+        <div class="section">
+            {{ solucion_ia|safe }}
+        </div>
     </div>
 
-    <a href="/">Generar otro caso</a>
+    <div class="box2">
+        <h2>Análisis comparativo</h2>
+        <div class="section">
+            {{ analisis|safe }}
+        </div>
+    </div>
+
+    
 </body>
+<footer>
+    <form method="POST" action="/descargar_pdf" style="display: inline-block;">
+        <textarea name="caso" hidden>{{ caso }}</textarea>
+        <textarea name="solucion_usuario" hidden>{{ solucion_usuario }}</textarea>
+        <textarea name="solucion_ia" hidden>{{ solucion_ia }}</textarea>
+        <textarea name="analisis" hidden>{{ analisis }}</textarea>
+        <button type="submit">📄 Descargar PDF</button>
+    </form>
+
+    <a href="/" style="margin-left: 10px;">🔄 Generar otro caso</a>
+</footer>
+
 </html>
