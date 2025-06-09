@@ -5,6 +5,7 @@ from flask import send_file
 from xhtml2pdf import pisa
 import io
 import re
+from PyPDF2 import PdfReader
 
 app = Flask(__name__)
 
@@ -72,6 +73,35 @@ def descargar_pdf():
         return "Hubo un error al generar el PDF", 500
 
     return send_file(pdf_file, as_attachment=True, download_name="informe_iso42010.pdf")
+
+
+@app.route("/manual", methods=["GET"])
+def manual():
+    return render_template("manual.html")
+
+@app.route("/procesar_manual", methods=["POST"])
+def procesar_manual():
+    global caso_actual
+
+    # 1. Si viene texto manual
+    caso_manual = request.form.get("caso_manual", "").strip()
+    if caso_manual:
+        caso_actual = caso_manual
+    else:
+        # 2. Si viene PDF, lo leemos
+        archivo = request.files.get("caso_pdf")
+        if archivo and archivo.filename.endswith(".pdf"):
+            try:
+                pdf = PdfReader(archivo)
+                texto = "\n".join(page.extract_text() for page in pdf.pages if page.extract_text())
+                caso_actual = texto
+            except Exception as e:
+                return f"Error al leer el PDF: {e}", 500
+        else:
+            return "No se ingresó un texto ni se subió un archivo válido.", 400
+
+    caso_html = markdown.markdown(caso_actual)
+    return render_template("generar.html", caso=caso_html)
 
 
 
