@@ -71,14 +71,19 @@ def comparar_respuestas(usuario, ia):
 def evaluar_alineacion_iso42010(texto):
     """
     Evalúa qué tan alineado está un texto con los principios de la norma ISO 42010.
-    Devuelve un porcentaje entre 0 y 100, siendo 0 sin relación y 100 totalmente alineado.
+    Devuelve un porcentaje entre 0 y 100.
     """
     prompt = (
-        "Eres un experto en arquitectura de sistemas y conoces la norma ISO/IEC/IEEE 42010. "
-        "Tu tarea es leer el siguiente texto y evaluar si está relacionado técnica y directamente con los principios de esta norma. "
-        "Si el texto no menciona arquitectura, stakeholders, puntos de vista, modelos o conceptos claves de ISO 42010, responde 0. "
-        "Si el texto aplica correctamente esos principios, responde con un porcentaje entre 0 y 100 según el nivel de alineación. "
-        "Solo devuelve un número, sin explicaciones ni símbolos.\n\n"
+        "Actúa como un auditor experto en arquitectura de sistemas con conocimiento profundo de la norma ISO/IEC/IEEE 42010. "
+        "Evalúa qué tan bien el siguiente texto aplica los principios clave de la norma, considerando los siguientes criterios:\n"
+        "- Identificación clara de stakeholders y sus preocupaciones\n"
+        "- Uso de puntos de vista arquitectónicos\n"
+        "- Uso de modelos estructurados para describir la arquitectura\n"
+        "- Claridad, trazabilidad y coherencia en la solución\n"
+        "- Terminología y conceptos correctos según ISO 42010\n\n"
+        "Evalúa del 0 al 100 qué tan alineado está el texto con base en estos cinco criterios. "
+        "Si cumple de forma parcial, asigna una puntuación proporcional. Si es muy general o no menciona aspectos clave, califica bajo.\n"
+        "Solo devuelve un número entre 0 y 100, sin explicaciones ni símbolos.\n\n"
         f"Texto:\n{texto}"
     )
 
@@ -89,6 +94,7 @@ def evaluar_alineacion_iso42010(texto):
     except Exception as e:
         print("Error al evaluar alineación ISO 42010:", e)
         return 0.0
+
     
 def analizar_respuestas(respuesta_usuario, alineacion_usuario, respuesta_ia, alineacion_ia):
     """
