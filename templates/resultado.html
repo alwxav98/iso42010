@@ -9,7 +9,13 @@
             font-family: 'Inter', sans-serif;
             background-color: #C2CFCE;
             padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
             text-align: center;
+            color: #333;
+            margin-bottom: 30px;
         }
 
         .box {
@@ -17,8 +23,26 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin: 20px auto;
-            max-width: 900px;
+            margin: 0 auto 30px auto;
+            max-width: 1000px;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .column {
+            flex: 1;
+            min-width: 400px;
+            max-width: 480px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .box2 {
@@ -26,13 +50,8 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin: 20px auto;
-            max-width: 900px;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
+            margin: 30px auto;
+            max-width: 1000px;
         }
 
         .section {
@@ -70,43 +89,55 @@
             margin-top: 40px;
             text-align: center;
         }
-
     </style>
 </head>
 <body>
     <h1>Resultado Comparativo</h1>
 
+    <!-- Caso de estudio -->
     <div class="box">
-        <h2>Tu Solución</h2>
+        <h2 style="text-align: center;">Caso de Estudio</h2>
         <div class="section">
-            {{ solucion_usuario|safe }}
-        </div>
-
-        <h2>Solución Generada por IA</h2>
-        <div class="section">
-            {{ solucion_ia|safe }}
+            {{ caso|safe }}
         </div>
     </div>
 
+    <!-- Soluciones en dos columnas -->
+    <div class="row">
+        <div class="column">
+            <h2>Tu Solución</h2>
+            <div class="section">
+                {{ solucion_usuario|safe }}
+            </div>
+        </div>
+
+        <div class="column">
+            <h2>Solución Generada por IA</h2>
+            <div class="section">
+                {{ solucion_ia|safe }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Análisis comparativo -->
     <div class="box2">
-        <h2>Análisis comparativo</h2>
+        <h2 style="text-align: center;">Análisis Comparativo</h2>
         <div class="section">
             {{ analisis|safe }}
         </div>
     </div>
 
-    
+    <!-- Botones -->
+    <footer>
+        <form method="POST" action="/descargar_pdf" style="display: inline-block;">
+            <textarea name="caso" hidden>{{ caso }}</textarea>
+            <textarea name="solucion_usuario" hidden>{{ solucion_usuario }}</textarea>
+            <textarea name="solucion_ia" hidden>{{ solucion_ia }}</textarea>
+            <textarea name="analisis" hidden>{{ analisis }}</textarea>
+            <button type="submit">📄 Descargar PDF</button>
+        </form>
+
+        <a href="/" style="margin-left: 10px;">🔄 Generar otro caso</a>
+    </footer>
 </body>
-<footer>
-    <form method="POST" action="/descargar_pdf" style="display: inline-block;">
-        <textarea name="caso" hidden>{{ caso }}</textarea>
-        <textarea name="solucion_usuario" hidden>{{ solucion_usuario }}</textarea>
-        <textarea name="solucion_ia" hidden>{{ solucion_ia }}</textarea>
-        <textarea name="analisis" hidden>{{ analisis }}</textarea>
-        <button type="submit">📄 Descargar PDF</button>
-    </form>
-
-    <a href="/" style="margin-left: 10px;">🔄 Generar otro caso</a>
-</footer>
-
 </html>
